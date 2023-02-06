@@ -1,0 +1,58 @@
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+const int ITERATIONS = 6; // numero di iterazioni dell'algoritmo di sierpinski
+const int SIZE = 512; // dimensione del quadrato di partenza
+int x1 = 0, y1 = 0, x2 = SIZE, y2 = SIZE; // coordinate del quadrato di partenza
+
+void drawSierpinski(int x1, int y1, int x2, int y2, int iterations) {
+    // controlla se il numero di iterazioni è arrivato a zero
+    if (iterations == 0) {
+        // disegna il quadrato corrente
+        rectangle(x1, y1, x2, y2);
+    } else {
+        // calcola le coordinate del quadrato sinistro
+        int x3 = x1 + (x2 - x1) / 3;
+        int y3 = y1 + (y2 - y1) / 3;
+
+        // calcola le coordinate del quadrato centrale
+        int x4 = x1 + 2 * (x2 - x1) / 3;
+        int y4 = y1 + 2 * (y2 - y1) / 3;
+
+        // richiama ricorsivamente la funzione sui quadrati sinistro, centrale e destro
+        drawSierpinski(x1, y1, x3, y3, iterations - 1);
+        drawSierpinski(x3, y1, x4, y3, iterations - 1);
+        drawSierpinski(x4, y1, x2, y3, iterations - 1);
+        drawSierpinski(x1, y3, x3, y4, iterations - 1);
+        drawSierpinski(x4, y3, x2, y4, iterations - 1);
+        drawSierpinski(x1, y4, x3, y2, iterations - 1);
+        drawSierpinski(x3, y4, x4, y2, iterations - 1);
+        drawSierpinski(x4, y4, x2, y2, iterations - 1);
+    }
+}
+
+int main() {
+    // inizializza la finestra grafica
+    initwindow(SIZE, SIZE);
+
+    // chiedi all'utente il numero di iterazioni dell'algoritmo di sierpinski
+    std::cout << "Inserisci il numero di iterazioni dell'algoritmo di sierpinski (da 1 a 6): ";
+    std::cin >> ITERATIONS;
+
+    // controlla che il numero di iterazioni sia compreso tra 1 e 6
+    if (ITERATIONS < 1 || ITERATIONS > 6) {
+        std::cout << "Numero di iterazioni non valido. Usando il valore predefinito di 6." << std::endl;
+        ITERATIONS =6;
+}
+
+Copy code
+// chiamo la funzione drawSierpinski con i parametri desiderati
+drawSierpinski(x1, y1, x2, y2, ITERATIONS);
+
+// attendo che l'utente chiuda la finestra
+getch();
+
+// chiudo la finestra grafica
+closegraph();
+
+return 0;
